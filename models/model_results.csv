@@ -1,0 +1,4 @@
+Model,MAE,RMSE,R2 Score
+Random Forest,18352.51,28572.66,0.8936
+Decision Tree,23275.46,36892.73,0.8226
+Linear Regression,24533.44,38876.76,0.803

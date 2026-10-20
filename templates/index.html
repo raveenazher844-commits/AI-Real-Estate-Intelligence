@@ -1,0 +1,228 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EstateIQ | AI Real Estate</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='/style.css') }}">
+</head>
+<body>
+    <header class="navbar">
+        <a href="/" class="brand">Estate<span>IQ</span></a>
+        <nav>
+            <a href="#predict">Price Predictor</a>
+            <a href="#recommend">Properties</a>
+            <a href="#assistant">AI Assistant</a>
+        </nav>
+        <span class="status">● AI Platform</span>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="hero-content">
+                <span class="eyebrow">SMARTER PROPERTY DECISIONS</span>
+                <h1>Find Your Next Home<br>With <span>Artificial Intelligence.</span></h1>
+                <p>
+                    Explore data-driven price estimates, discover properties
+                    that fit your budget, and ask our real estate assistant.
+                </p>
+                <a class="primary-btn" href="#predict">Explore the Platform →</a>
+            </div>
+            <div class="hero-card">
+                <div class="house-icon">⌂</div>
+                <span class="muted">YOUR NEXT MOVE STARTS HERE</span>
+                <h2>Real Estate Intelligence</h2>
+                <p>Data Analysis · Machine Learning · Generative AI</p>
+                <div class="hero-tags">
+                    <span>Price Prediction</span>
+                    <span>Smart Matching</span>
+                    <span>AI Assistant</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="stats">
+            <article class="stat-card">
+                <span>Dataset Properties</span>
+                <h2>{{ "{:,}".format(total_properties) }}</h2>
+                <p>Records available for analysis</p>
+            </article>
+            <article class="stat-card">
+                <span>Average Sale Price</span>
+                <h2>${{ "{:,.0f}".format(average_price) }}</h2>
+                <p>Historical dataset average</p>
+            </article>
+            <article class="stat-card">
+                <span>ML Models</span>
+                <h2>03</h2>
+                <p>Regression models compared</p>
+            </article>
+        </section>
+
+        {% if error %}
+        <div class="alert">{{ error }}</div>
+        {% endif %}
+
+        <section class="section" id="predict">
+            <div class="section-heading">
+                <span class="eyebrow">MACHINE LEARNING</span>
+                <h2>Estimate Your Property Price</h2>
+                <p>Enter the property details to get a model-based estimate.</p>
+            </div>
+
+            <form action="/predict" method="post" class="panel">
+                <div class="form-grid">
+                    <label>Living Area (sq ft)
+                        <input type="number" name="area" min="1"
+                               value="1800" required>
+                    </label>
+                    <label>Overall Quality (1–10)
+                        <input type="number" name="quality" min="1" max="10"
+                               value="6" required>
+                    </label>
+                    <label>Year Built
+                        <input type="number" name="year_built" min="1800"
+                               max="2026" value="2000" required>
+                    </label>
+                    <label>Basement Area (sq ft)
+                        <input type="number" name="basement" min="0"
+                               value="800" required>
+                    </label>
+                    <label>Garage Capacity (cars)
+                        <input type="number" name="garage" min="0" max="5"
+                               value="2" required>
+                    </label>
+                    <label>Full Bathrooms
+                        <input type="number" name="bathrooms" min="0" max="5"
+                               value="2" required>
+                    </label>
+                    <label>Bedrooms
+                        <input type="number" name="bedrooms" min="0" max="10"
+                               value="3" required>
+                    </label>
+                    <label>Lot Area (sq ft)
+                        <input type="number" name="lot_area" min="1"
+                               value="8000" required>
+                    </label>
+                </div>
+                <button type="submit" class="primary-btn">Predict House Price →</button>
+            </form>
+
+            {% if prediction is not none %}
+            <div class="result-card">
+                <span class="eyebrow">PREDICTION RESULT</span>
+                <h2>${{ "{:,.2f}".format(prediction) }}</h2>
+                <p>Estimated sale price based on the trained ML model.</p>
+                <small>This is a model estimate, not a verified market valuation.</small>
+            </div>
+            {% endif %}
+        </section>
+
+        <section class="section" id="recommend">
+            <div class="section-heading">
+                <span class="eyebrow">PERSONALIZED DISCOVERY</span>
+                <h2>Find Properties For Your Budget</h2>
+                <p>Filter the available dataset by budget, bedrooms and neighborhood.</p>
+            </div>
+
+            <form action="/recommend" method="post" class="panel">
+                <div class="form-grid">
+                    <label>Maximum Budget (USD)
+                        <input type="number" name="budget" min="1"
+                               value="200000" required>
+                    </label>
+                    <label>Minimum Bedrooms
+                        <input type="number" name="bedrooms" min="0"
+                               value="3" required>
+                    </label>
+                    <label>Neighborhood (optional)
+                        <input type="text" name="location"
+                               placeholder="e.g. CollgCr">
+                    </label>
+                </div>
+                <button type="submit" class="primary-btn">Find Matching Properties →</button>
+            </form>
+
+            {% if recommendations %}
+            <div class="property-grid">
+                {% for house in recommendations %}
+                <article class="property-card">
+                    <div class="property-art">⌂</div>
+                    <span class="muted">{{ house.location }}</span>
+                    <h3>${{ "{:,.0f}".format(house.price) }}</h3>
+                    <p>{{ house.bedrooms }} bedrooms · {{ house.area }} sq ft</p>
+                    <p>Quality: {{ house.quality }}/10 · Built {{ house.year }}</p>
+                </article>
+                {% endfor %}
+            </div>
+            {% elif request.method == "POST" and not error %}
+            <p class="notice">No matching properties were found. Try a higher budget or fewer bedrooms.</p>
+            {% endif %}
+        </section>
+
+        <section class="section" id="assistant">
+            <div class="section-heading">
+                <span class="eyebrow">GENERATIVE AI + RAG</span>
+                <h2>Ask Your Real Estate Assistant</h2>
+                <p>Ask about price prediction, property quality, model evaluation or recommendations.</p>
+            </div>
+
+            <div class="chat-panel">
+                <div class="chat-avatar">AI</div>
+                <div class="chat-intro">
+                    <h3>EstateIQ Assistant</h3>
+                    <p>Ask a question about real estate or this project.</p>
+                </div>
+                <form action="/chat" method="post" class="chat-form">
+                    <textarea name="question" rows="3" required
+                              placeholder="How does house price prediction work?"></textarea>
+                    <button type="submit" class="primary-btn">Ask Assistant →</button>
+                </form>
+
+                {% if chat_question %}
+                <div class="chat-message user-message">
+                    <strong>You</strong>
+                    <p>{{ chat_question }}</p>
+                </div>
+                <div class="chat-message ai-message">
+                    <strong>Assistant</strong>
+                    <p>{{ chat_answer }}</p>
+                </div>
+                {% endif %}
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-heading">
+                <span class="eyebrow">PROJECT INSIGHTS</span>
+                <h2>Data Analysis</h2>
+                <p>Visualizations generated from the Kaggle training dataset.</p>
+            </div>
+            <div class="plot-grid">
+                <article class="plot-card">
+                    <h3>Sale Price Distribution</h3>
+                    <img src="/plots/price_distribution.png"
+                         alt="Sale price distribution graph">
+                </article>
+                <article class="plot-card">
+                    <h3>House Quality vs Price</h3>
+                    <img src="/plots/quality_vs_price.png"
+                         alt="House quality versus price graph">
+                </article>
+                <article class="plot-card">
+                    <h3>Living Area vs Price</h3>
+                    <img src="/plots/area_vs_price.png"
+                         alt="Living area versus price graph">
+                </article>
+            </div>
+        </section>
+
+        <footer>
+            <a href="/docs">API Documentation</a>
+            <p>EstateIQ · AI Real Estate Intelligence Platform</p>
+            <p>Educational project. Predictions are estimates, not financial advice.</p>
+        </footer>
+    </main>
+</body>
+</html>

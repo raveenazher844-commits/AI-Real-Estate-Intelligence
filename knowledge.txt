@@ -1,0 +1,47 @@
+
+AI REAL ESTATE KNOWLEDGE BASE
+
+House Price Prediction:
+A house price prediction is an estimate based on property features.
+Important features include living area, overall quality, year built,
+basement size, garage capacity, bathrooms, bedrooms, and lot area.
+A prediction is an estimate and is not a guaranteed market price.
+
+Property Quality:
+Overall quality describes the general material and finish quality
+of a property. Better quality may be associated with a higher price.
+
+Living Area:
+Larger living areas may increase a property's value, but location,
+condition, layout, and other features also matter.
+
+Bedrooms and Bathrooms:
+Bedroom and bathroom counts influence suitability for families.
+Their effect on price depends on the local housing market.
+
+Year Built:
+Newer houses may have modern features, but older houses can also
+have high value because of location, condition, or renovation.
+
+Machine Learning:
+Linear Regression models a relationship between input features
+and the target price.
+Decision Tree Regression learns decision rules from data.
+Random Forest Regression combines predictions from multiple trees.
+
+Model Evaluation:
+MAE measures average absolute prediction error.
+RMSE gives additional weight to large prediction errors.
+R2 measures how much variation in the target is explained by a model.
+
+Recommendations:
+A property recommendation should consider budget, preferred location,
+bedroom requirements, and other user preferences.
+Users should verify actual prices, property condition, ownership,
+legal documents, and local market conditions before purchasing.
+
+Dataset Limitations:
+The House Prices dataset is based on residential property sales in
+Ames, Iowa. Its predictions may not represent prices in Pakistan
+or other countries. Currency and location must not be assumed to
+match a user's local market.
